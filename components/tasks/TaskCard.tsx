@@ -18,8 +18,16 @@ import {
 	TooltipTrigger,
 } from "../ui/tooltip";
 
-const TaskCard = ({ task }: { task: Task }) => {
-	const [completed, setCompleted] = useState(task.completed);
+const TaskCard = ({
+	task,
+	listTasks,
+	setListTasks,
+}: {
+	task: Task;
+	listTasks: Task[];
+	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}) => {
+	const [completed, setCompleted] = useState(false);
 
 	const displayPriority = (priority: Priority) => {
 		switch (priority) {
@@ -73,8 +81,28 @@ const TaskCard = ({ task }: { task: Task }) => {
 		}
 	};
 
-	const markTaskAsCompleted = () => {
-		setCompleted(!completed);
+	const handleTaskCompleted = async (editedTask: Task) => {
+		try {
+			// Update the tasks state with the updated task
+			setListTasks((prevTasks) =>
+				prevTasks.map((task) => (task.id === editedTask.id ? editedTask : task))
+			);
+
+			const res = await fetch(`/api/tasks/update/${editedTask.id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ editedTask }), // Ensure it's wrapped correctly
+			});
+
+			if (!res.ok) {
+				console.error("Error updating task.");
+				return;
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const truncateText = (text: string | null, maxLength: number) => {
@@ -83,6 +111,10 @@ const TaskCard = ({ task }: { task: Task }) => {
 		}
 		return "No description found.";
 	};
+
+	useEffect(() => {
+		setCompleted(task.completed);
+	}, [task]);
 
 	return (
 		<Card className="h-full flex flex-col">
@@ -109,14 +141,24 @@ const TaskCard = ({ task }: { task: Task }) => {
 									{completed ? (
 										<button
 											className="p-2 hover:bg-gray-100 transition-colors bg-transparent rounded-full"
-											onClick={markTaskAsCompleted}
+											onClick={() => {
+												const updatedTask: Task = task;
+												updatedTask.completed = !task.completed;
+												setCompleted(updatedTask.completed);
+												handleTaskCompleted(updatedTask);
+											}}
 										>
 											<X size={20} />
 										</button>
 									) : (
 										<button
 											className="p-2 hover:bg-gray-100 transition-colors bg-transparent rounded-full"
-											onClick={markTaskAsCompleted}
+											onClick={() => {
+												const updatedTask: Task = task;
+												updatedTask.completed = !task.completed;
+												setCompleted(updatedTask.completed);
+												handleTaskCompleted(updatedTask);
+											}}
 										>
 											<Check size={20} />
 										</button>

@@ -53,8 +53,8 @@ const TaskFilters = ({
 					<SelectValue placeholder="Filter by Status" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value={"To-Do"}>To-Do</SelectItem>
-					<SelectItem value={"Completed"}>Completed</SelectItem>
+					<SelectItem value={"false"}>To-Do</SelectItem>
+					<SelectItem value={"true"}>Completed</SelectItem>
 				</SelectContent>
 			</Select>
 

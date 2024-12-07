@@ -29,6 +29,23 @@ export async function getAllUserTasks({
 	return allUserTasks;
 }
 
+export async function updateTask(taskId: string, updatedTask: Task) {
+	const taskBeingUpdated = db.task.update({
+		where: {
+			id: taskId,
+		},
+		data: {
+			title: updatedTask.title,
+			description: updatedTask.description,
+			dueDate: new Date(updatedTask.dueDate),
+			priority: updatedTask.priority,
+			completed: updatedTask.completed,
+		},
+	});
+
+	return taskBeingUpdated;
+}
+
 export async function getProjectTasks(projectId: string) {
 	const projectTasks = await db.task.findMany({
 		where: { projectId },

@@ -128,7 +128,9 @@ const ListPage = () => {
 			filtered = listTasks.filter((task) => task.priority === selectedPriority);
 		}
 		if (selectedStatus) {
-			filtered = listTasks.filter((task) => task.priority === selectedPriority);
+			filtered = listTasks.filter(
+				(task) => task.completed.toString() === selectedStatus
+			);
 		}
 		if (dateFilter) {
 			const today = stripTime(new Date());
@@ -249,7 +251,12 @@ const ListPage = () => {
 						{filteredTasks.length > 0 ? (
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 								{filteredTasks.map((task, index) => (
-									<TaskCard task={task} key={index} />
+									<TaskCard
+										task={task}
+										key={index}
+										listTasks={listTasks}
+										setListTasks={setListTasks}
+									/>
 								))}
 							</div>
 						) : (
