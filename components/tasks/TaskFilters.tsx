@@ -67,10 +67,10 @@ const TaskFilters = ({
 					<SelectValue placeholder="Filter by Due Date" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="Today">Today</SelectItem>
-					<SelectItem value="This Week">This Week</SelectItem>
-					<SelectItem value="This Month">This Month</SelectItem>
-					<SelectItem value="Overdue">Overdue</SelectItem>
+					<SelectItem value="ascending">Date Ascending</SelectItem>
+					<SelectItem value="descending">Date Descending</SelectItem>
+					<SelectItem value="createdAscending">Created Ascending</SelectItem>
+					<SelectItem value="createdDescending">Created Descending</SelectItem>
 				</SelectContent>
 			</Select>
 

@@ -38,5 +38,5 @@ export interface ListContextProps {
 	addList: (list: List) => void;
 	removeList: (listId: string) => void;
 	editList: (list: List) => void;
-	fetchLists: (userId: string) => Promise<void>;
+	fetchLists: (userId: string) => Promise<List[]>;
 }

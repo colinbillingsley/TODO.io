@@ -107,7 +107,9 @@ const TaskCard = ({
 
 	const truncateText = (text: string | null, maxLength: number) => {
 		if (text) {
-			return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+			return text.length > maxLength
+				? text.slice(0, maxLength).trim() + "..."
+				: text;
 		}
 		return "No description found.";
 	};
@@ -117,10 +119,16 @@ const TaskCard = ({
 	}, [task]);
 
 	return (
-		<Card className="h-full flex flex-col">
+		<Card
+			className={`h-[18rem] flex flex-col ${
+				completed ? "opacity-60" : "opacity-100"
+			} transition-opacity duration-300 ease-in-out`}
+		>
 			<CardHeader>
 				<div className="flex justify-between items-center">
-					<CardTitle className="">{task.title}</CardTitle>
+					<CardTitle className={`${completed ? "line-through" : ""}`}>
+						{task.title}
+					</CardTitle>
 					<div className="flex items-center justify-start gap-2">
 						<TooltipProvider>
 							<Tooltip delayDuration={100}>
@@ -177,9 +185,9 @@ const TaskCard = ({
 					</span>
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="flex flex-col justify-between h-full">
-				<div className="mb-3">
-					<span>{truncateText(task.description, 150)}</span>
+			<CardContent className={`flex flex-col justify-between h-full`}>
+				<div className={`mb-3 ${completed ? "line-through" : ""}`}>
+					<span>{truncateText(task.description, 125)}</span>
 				</div>
 				<div className="flex items-end justify-end gap-3 self-end">
 					{displayPriority(task.priority)}

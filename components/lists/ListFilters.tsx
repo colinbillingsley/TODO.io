@@ -29,10 +29,8 @@ const ListFilters = ({
 					<SelectValue placeholder="Filter by Created Date" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="Today">Today</SelectItem>
-					<SelectItem value="This Week">This Week</SelectItem>
-					<SelectItem value="This Month">This Month</SelectItem>
-					<SelectItem value="Previous Months">Previous Months</SelectItem>
+					<SelectItem value="ascending">Ascending</SelectItem>
+					<SelectItem value="descending">Descending</SelectItem>
 				</SelectContent>
 			</Select>
 

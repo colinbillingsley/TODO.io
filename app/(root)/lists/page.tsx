@@ -1,5 +1,4 @@
 "use client";
-import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import withAuth from "@/hoc/withAuth";
 import React, { useEffect, useState } from "react";
@@ -12,26 +11,54 @@ import ListFilters from "@/components/lists/ListFilters";
 import AddList from "@/components/lists/AddList";
 import { Input } from "@/components/ui/input";
 
+export interface ListWithNum {
+	list: List;
+	numTasks: number;
+}
+
 const Lists = () => {
 	const { user } = useAuthContext();
-	const { lists, fetchLists } = useListContext();
+	const { fetchLists } = useListContext();
 	const [isLoading, setIsLoading] = useState(false);
-	const [numTasks, setNumTasks] = useState(0);
-	const [numTasksLoading, setNumTasksLoading] = useState(false);
-	const [listsWithTasks, setListsWithTasks] = useState<
-		{ list: List; numTasks: number }[]
-	>([]);
-	const [filteredLists, setFilteredLists] = useState<
-		{ list: List; numTasks: number }[]
-	>([]);
-	const [dateFilter, setDateFilter] = useState<string | undefined>("");
+	const [lists, setLists] = useState<List[]>([]);
+	const [filteredLists, setFilteredLists] = useState<ListWithNum[]>([]);
+	const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
 	const [searchText, setSearchText] = useState<string | undefined>("");
 
-	const sortDatesAscending = (lists: List[]) => {
-		lists.sort(
-			(a, b) =>
-				new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+	const sortDatesAscending = (lists: ListWithNum[] | null) => {
+		if (lists) {
+			lists.sort(
+				(a, b) =>
+					new Date(a.list.createdAt).getTime() -
+					new Date(b.list.createdAt).getTime()
+			);
+		}
+	};
+
+	const sortDatesDescending = (lists: ListWithNum[] | null) => {
+		if (lists) {
+			lists.sort(
+				(a, b) =>
+					new Date(b.list.createdAt).getTime() -
+					new Date(a.list.createdAt).getTime()
+			);
+		}
+	};
+
+	const getListTaskAmounts = async (lists: List[]) => {
+		let allListsWithNum: ListWithNum[] = [];
+		await Promise.all(
+			lists.map(async (list: List) => {
+				const res = await fetch(`/api/tasks/count/${list.id}`, {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				});
+
+				const numTasks = res.ok ? await res.json() : 0;
+				allListsWithNum.push({ list, numTasks });
+			})
 		);
+		return allListsWithNum;
 	};
 
 	const getAllUserLists = async () => {
@@ -39,24 +66,15 @@ const Lists = () => {
 		try {
 			if (!user) return;
 
-			const recLists: Array<List> = await fetchLists(user.id);
-			console.log(recLists);
-			sortDatesAscending(recLists);
+			const recLists: List[] = await fetchLists(user.id);
+			setLists([...recLists]);
 
 			// Fetch task counts for each list
-			const listsWithTaskCounts = await Promise.all(
-				recLists.map(async (list: List) => {
-					const res = await fetch(`/api/tasks/count/${list.id}`, {
-						method: "GET",
-						headers: { "Content-Type": "application/json" },
-					});
-
-					const numTasks = res.ok ? await res.json() : 0;
-					return { list, numTasks };
-				})
+			const listsWithTaskCounts: ListWithNum[] = await getListTaskAmounts(
+				recLists
 			);
 
-			setListsWithTasks(listsWithTaskCounts);
+			sortDatesAscending(listsWithTaskCounts);
 			setFilteredLists(listsWithTaskCounts);
 		} catch (error) {
 			console.error(error);
@@ -66,48 +84,31 @@ const Lists = () => {
 		}
 	};
 
+	const getAllListData = async () => {
+		await getAllUserLists();
+	};
+
 	const clearFilters = () => {
 		setDateFilter(undefined);
 	};
 
-	const stripTime = (date: Date) => {
-		return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	};
-
 	const determineFilters = () => {
-		let filtered = [...listsWithTasks];
+		let filtered = [...filteredLists];
 		if (dateFilter) {
-			const today = stripTime(new Date());
-			filtered = filtered.filter((list) => {
-				const listDate = stripTime(new Date(list.list.createdAt));
-				console.log(listDate, today);
-
-				switch (dateFilter) {
-					case "Today":
-						return listDate.toDateString() === today.toDateString();
-					case "This Week":
-						const startOfWeek = new Date(today);
-						startOfWeek.setDate(today.getDate() - today.getDay());
-						const endOfWeek = new Date(startOfWeek);
-						endOfWeek.setDate(startOfWeek.getDate() + 6);
-						return listDate >= startOfWeek && listDate <= endOfWeek;
-					case "This Month":
-						return (
-							listDate.getMonth() === today.getMonth() &&
-							listDate.getFullYear() === today.getFullYear()
-						);
-					case "Previous Months":
-						console.log(listDate.getFullYear(), listDate.getMonth());
-						return (
-							listDate.getFullYear() < today.getFullYear() || // Any previous year
-							(listDate.getFullYear() === today.getFullYear() &&
-								listDate.getMonth() < today.getMonth()) // Same year, earlier months
-						);
-					default:
-						return true; // No date filter applied
-				}
-			});
+			switch (dateFilter) {
+				case "ascending":
+					sortDatesAscending(filtered);
+					break;
+				case "descending":
+					sortDatesDescending(filtered);
+					break;
+				default:
+					break; // No date filter applied
+			}
+		} else {
+			sortDatesAscending(filtered);
 		}
+
 		if (searchText) {
 			const lowerCaseSearch = searchText.toLowerCase();
 			filtered = filtered.filter((list) =>
@@ -118,17 +119,13 @@ const Lists = () => {
 	};
 
 	useEffect(() => {
-		getAllUserLists();
+		getAllListData();
 	}, []);
 
 	useEffect(() => {
 		const filtered = determineFilters();
 		setFilteredLists(filtered);
-	}, [searchText, dateFilter]);
-
-	useEffect(() => {
-		console.log("lists changed", lists);
-	}, [lists]);
+	}, [searchText, dateFilter, lists]);
 
 	return (
 		<>
@@ -144,7 +141,12 @@ const Lists = () => {
 					<PageTitle>Lists</PageTitle>
 					<div className="flex flex-col lg:flex-row items-start lg:items-center gap-3">
 						<div className="flex items-center gap-3">
-							<AddList variant={"default"} className="h-fit py-2" />
+							<AddList
+								variant={"default"}
+								className="h-fit py-2"
+								setLists={setLists}
+								setFilteredLists={setFilteredLists}
+							/>
 							<ListFilters
 								dateFilter={dateFilter}
 								setDateFilter={setDateFilter}
@@ -160,7 +162,7 @@ const Lists = () => {
 							}}
 						/>
 					</div>
-					<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5">
+					<div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] mt-5">
 						{filteredLists.length > 0
 							? filteredLists.map(({ list, numTasks }, index) => (
 									<ListCard list={list} numTasks={numTasks} key={index} />

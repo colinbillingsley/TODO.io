@@ -16,6 +16,8 @@ import { Button } from "../ui/button";
 import LoadingSpinner from "../login/LoadingSpinner";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useListContext } from "@/app/context/ListContext";
+import { List } from "@/types";
+import { ListWithNum } from "@/app/(root)/lists/page";
 
 const listSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -26,8 +28,12 @@ type ListFormValues = z.infer<typeof listSchema>;
 
 const AddListForm = ({
 	setIsOpen,
+	setLists,
+	setFilteredLists,
 }: {
 	setIsOpen: (state: boolean) => void;
+	setLists?: React.Dispatch<React.SetStateAction<List[]>>;
+	setFilteredLists?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<String>("");
@@ -66,6 +72,12 @@ const AddListForm = ({
 			const data = await res.json();
 			// add list to the list context
 			addList(data);
+			if (setLists) {
+				setLists((prevList) => [...prevList, data]);
+			}
+			if (setFilteredLists) {
+				setFilteredLists((prev) => [...prev, { list: data, numTasks: 0 }]);
+			}
 			setIsOpen(false);
 		} catch (error) {
 			console.error("List creation error:", error);

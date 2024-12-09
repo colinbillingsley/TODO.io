@@ -61,6 +61,26 @@ const ListPage = () => {
 		);
 	};
 
+	const sortDatesDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+		);
+	};
+
+	const sortDatesCreatedAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		);
+	};
+
+	const sortDatesCreatedDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
+	};
+
 	const fetchListTasks = async (projectId: string | null) => {
 		if (projectId) {
 			try {
@@ -117,10 +137,6 @@ const ListPage = () => {
 		await fetchList(user.id, listName);
 	};
 
-	const stripTime = (date: Date) => {
-		return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	};
-
 	const determineTaskFilters = () => {
 		let filtered: Task[] = [...listTasks];
 
@@ -133,31 +149,22 @@ const ListPage = () => {
 			);
 		}
 		if (dateFilter) {
-			const today = stripTime(new Date());
-			filtered = filtered.filter((task) => {
-				const taskDate = stripTime(new Date(task.dueDate));
-				console.log(taskDate, today);
-
-				switch (dateFilter) {
-					case "Today":
-						return taskDate.toDateString() === today.toDateString();
-					case "This Week":
-						const startOfWeek = new Date(today);
-						startOfWeek.setDate(today.getDate() - today.getDay());
-						const endOfWeek = new Date(startOfWeek);
-						endOfWeek.setDate(startOfWeek.getDate() + 6);
-						return taskDate >= startOfWeek && taskDate <= endOfWeek;
-					case "This Month":
-						return (
-							taskDate.getMonth() === today.getMonth() &&
-							taskDate.getFullYear() === today.getFullYear()
-						);
-					case "Overdue":
-						return taskDate < today;
-					default:
-						return true; // No date filter applied
-				}
-			});
+			switch (dateFilter) {
+				case "ascending":
+					sortDatesAscending(filtered);
+					break;
+				case "descending":
+					sortDatesDescending(filtered);
+					break;
+				case "createdAscending":
+					sortDatesCreatedAscending(filtered);
+					break;
+				case "createdDescending":
+					sortDatesCreatedDescending(filtered);
+					break;
+				default:
+					break; // No date filter applied
+			}
 		} else {
 			sortDatesAscending(filtered);
 		}
@@ -168,7 +175,7 @@ const ListPage = () => {
 				task.title.toLowerCase().includes(lowerCaseSearch)
 			);
 		}
-		return filtered;
+		return filtered || [];
 	};
 
 	const clearFilters = () => {
@@ -248,8 +255,8 @@ const ListPage = () => {
 					</div>
 
 					<div className="">
-						{filteredTasks.length > 0 ? (
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+						{filteredTasks?.length > 0 ? (
+							<div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
 								{filteredTasks.map((task, index) => (
 									<TaskCard
 										task={task}

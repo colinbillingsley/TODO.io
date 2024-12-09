@@ -15,7 +15,9 @@ export const ListContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [lists, setLists] = useState<Array<List>>([]);
 
-	const fetchLists = async (userId: string) => {
+	const fetchLists = async (userId: string): Promise<List[]> => {
+		let listArr: List[] = [];
+
 		try {
 			const res = await fetch(`/api/lists/user/${userId}`, {
 				method: "GET",
@@ -23,15 +25,16 @@ export const ListContextProvider: React.FC<{ children: ReactNode }> = ({
 					"Content-Type": "application/json",
 				},
 			});
-
 			if (res.ok) {
 				const data = await res.json();
 				console.log(data);
 				setLists(data);
-				return data;
+				listArr = [...data];
 			}
 		} catch (error) {
 			console.error(error);
+		} finally {
+			return listArr || [];
 		}
 	};
 

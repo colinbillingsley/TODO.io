@@ -13,10 +13,14 @@ import { Plus } from "lucide-react";
 import AddListForm from "./AddListForm";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { List } from "@/types";
+import { ListWithNum } from "@/app/(root)/lists/page";
 
 const AddList = ({
 	variant,
 	className,
+	setLists,
+	setFilteredLists,
 }: {
 	variant:
 		| "link"
@@ -29,6 +33,8 @@ const AddList = ({
 		| null
 		| undefined;
 	className?: string;
+	setLists?: React.Dispatch<React.SetStateAction<List[]>>;
+	setFilteredLists?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -51,7 +57,11 @@ const AddList = ({
 					</DialogDescription>
 				</DialogHeader>
 				<>
-					<AddListForm setIsOpen={setIsOpen} />
+					<AddListForm
+						setIsOpen={setIsOpen}
+						setLists={setLists}
+						setFilteredLists={setFilteredLists}
+					/>
 				</>
 				<DialogFooter></DialogFooter>
 			</DialogContent>

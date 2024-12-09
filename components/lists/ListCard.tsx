@@ -14,7 +14,9 @@ import dayjs from "dayjs";
 const ListCard = ({ list, numTasks }: { list: List; numTasks: number }) => {
 	const truncateText = (text: string | null, maxLength: number) => {
 		if (text) {
-			return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+			return text.length > maxLength
+				? text.slice(0, maxLength).trim() + "..."
+				: text;
 		}
 		return "No description found.";
 	};
