@@ -45,6 +45,7 @@ export const ListContextProvider: React.FC<{ children: ReactNode }> = ({
 	const removeList = async (listId: string) => {
 		const newList = lists.filter((list) => list.id !== listId);
 		setLists(newList);
+		return newList;
 	};
 
 	const editList = async (updatedList: List) => {

@@ -141,10 +141,10 @@ const ListPage = () => {
 		let filtered: Task[] = [...listTasks];
 
 		if (selectedPriority) {
-			filtered = listTasks.filter((task) => task.priority === selectedPriority);
+			filtered = filtered.filter((task) => task.priority === selectedPriority);
 		}
 		if (selectedStatus) {
-			filtered = listTasks.filter(
+			filtered = filtered.filter(
 				(task) => task.completed.toString() === selectedStatus
 			);
 		}
@@ -182,7 +182,6 @@ const ListPage = () => {
 		setSelectedPriority(undefined);
 		setSelectedStatus(undefined);
 		setDateFilter(undefined);
-		setFilteredTasks(listTasks);
 	};
 
 	const recontructListName = (title: string) => {

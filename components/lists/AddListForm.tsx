@@ -18,6 +18,8 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useListContext } from "@/app/context/ListContext";
 import { List } from "@/types";
 import { ListWithNum } from "@/app/(root)/lists/page";
+import { toast } from "sonner";
+import dayjs from "dayjs";
 
 const listSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
@@ -78,6 +80,11 @@ const AddListForm = ({
 			if (setFilteredLists) {
 				setFilteredLists((prev) => [...prev, { list: data, numTasks: 0 }]);
 			}
+			toast("List has been created", {
+				description: `${dayjs(data.createdAt)
+					.format("dddd, MMMM DD, YYYY [at] h:mm A")
+					.toString()}`,
+			});
 			setIsOpen(false);
 		} catch (error) {
 			console.error("List creation error:", error);

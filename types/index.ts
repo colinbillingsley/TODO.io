@@ -36,7 +36,7 @@ export interface AuthContextProps {
 export interface ListContextProps {
 	lists: List[] | null;
 	addList: (list: List) => void;
-	removeList: (listId: string) => void;
+	removeList: (listId: string) => Promise<List[]>;
 	editList: (list: List) => void;
 	fetchLists: (userId: string) => Promise<List[]>;
 }

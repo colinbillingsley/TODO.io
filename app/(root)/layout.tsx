@@ -7,7 +7,7 @@ export default function Layout({
 	return (
 		<main className="flex min-h-screen w-full">
 			{/* Fixed Sidebar */}
-			<div className="flex-shrink-0 h-screen fixed">
+			<div className="flex-shrink-0 h-screen fixed z-999">
 				<Sidebar />
 			</div>
 

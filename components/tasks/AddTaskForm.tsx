@@ -16,6 +16,7 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Calendar } from "../ui/calendar";
 import dayjs from "dayjs";
+import { toast } from "sonner";
 
 const AddTaskForm = ({
 	projectId,
@@ -98,6 +99,11 @@ const AddTaskForm = ({
 			const data = await res.json();
 			addTask(data);
 			setIsOpen(false);
+			toast("Task has been created", {
+				description: `${dayjs(data.createdAt)
+					.format("dddd, MMMM DD, YYYY [at] h:mm A")
+					.toString()}`,
+			});
 		} catch (error) {
 			console.error(error);
 		} finally {

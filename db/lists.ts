@@ -21,6 +21,13 @@ export async function getListByName(userId: string, name: string) {
 	return existingList;
 }
 
+export async function deleteList(listId: string) {
+	const deletedList = await db.project.delete({
+		where: { id: listId },
+	});
+	return deletedList;
+}
+
 export async function createList(
 	name: string,
 	description: string | null,

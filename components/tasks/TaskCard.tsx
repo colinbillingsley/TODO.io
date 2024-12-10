@@ -17,6 +17,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "../ui/tooltip";
+import EditTask from "./EditTask";
 
 const TaskCard = ({
 	task,
@@ -33,25 +34,25 @@ const TaskCard = ({
 		switch (priority) {
 			case "LOW":
 				return (
-					<span className="text-sm font-semibold bg-blue-500 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-blue-500/25 text-blue-700 px-3 py-1 rounded-lg">
 						Low
 					</span>
 				);
 			case "MEDIUM":
 				return (
-					<span className="text-sm font-semibold bg-yellow-400 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-yellow-400/25 text-yellow-500 px-3 py-1 rounded-lg">
 						Medium
 					</span>
 				);
 			case "HIGH":
 				return (
-					<span className="text-sm font-semibold bg-red-500 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-red-500/25 text-red-700 px-3 py-1 rounded-lg">
 						High
 					</span>
 				);
 			default:
 				return (
-					<span className="text-sm font-semibold bg-purple-100 text-purple-400 px-3 py-1 rounded-lg">
+					<span className="text-sm bg-purple-500/25 text-purple-400 px-3 py-1 rounded-lg">
 						Unknown
 					</span>
 				);
@@ -62,19 +63,19 @@ const TaskCard = ({
 		switch (completed) {
 			case true:
 				return (
-					<span className="text-sm font-semibold bg-green-500 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-green-500/25 text-green-700 px-3 py-1 rounded-lg">
 						Completed
 					</span>
 				);
 			case false:
 				return (
-					<span className="text-sm font-semibold bg-purple-500 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-purple-500/25 text-purple-700 px-3 py-1 rounded-lg">
 						To-Do
 					</span>
 				);
 			default:
 				return (
-					<span className="text-sm font-semibold bg-pink-500 text-white px-3 py-1 rounded-lg">
+					<span className="text-sm bg-pink-500/25 text-white px-3 py-1 rounded-lg">
 						Unknown
 					</span>
 				);
@@ -133,9 +134,7 @@ const TaskCard = ({
 						<TooltipProvider>
 							<Tooltip delayDuration={100}>
 								<TooltipTrigger asChild>
-									<button className="p-2 hover:bg-gray-100 transition-colors bg-transparent rounded-full">
-										<Pencil size={20} />
-									</button>
+									<EditTask task={task} />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Edit</p>
@@ -180,7 +179,7 @@ const TaskCard = ({
 					</div>
 				</div>
 				<CardDescription>
-					<span className="text-primary font-bold bg-primary/25 px-2 py-1 rounded-sm">
+					<span className="text-primary bg-primary/25 px-2 py-1 rounded-sm">
 						{dayjs(task.dueDate).format("MMMM D, YYYY").toString()}
 					</span>
 				</CardDescription>

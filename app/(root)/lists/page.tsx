@@ -165,7 +165,14 @@ const Lists = () => {
 					<div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] mt-5">
 						{filteredLists.length > 0
 							? filteredLists.map(({ list, numTasks }, index) => (
-									<ListCard list={list} numTasks={numTasks} key={index} />
+									<ListCard
+										list={list}
+										numTasks={numTasks}
+										key={index}
+										setLists={setLists}
+										filteredLists={filteredLists}
+										setFilteredLists={setFilteredLists}
+									/>
 							  ))
 							: ""}
 					</div>
