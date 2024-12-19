@@ -39,10 +39,6 @@ const EditTask = ({ task }: { task: Task }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isOpen, setIsOpen] = useState(false);
 
-	useEffect(() => {
-		console.log(title, description, dueDate, priority);
-	}, []);
-
 	const resetFields = () => {
 		setTitle("");
 		setDescription("");

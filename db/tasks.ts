@@ -65,25 +65,42 @@ export async function countTasksInList(projectId: string) {
 /**
  * Retrieves all tasks that are due today
  *
- * @param {Object} params - The parameters for retrieving tasks.
- * @param {string} params.userId - The ID of the user whose tasks are being retrieved.
+ * @param {string} userId - The userId for retrieving tasks made by user.
  * @returns {Promise<Array<Task> | null>} - A promise that resolves to an array of tasks created by the user.
  */
-export async function getTodaysTasks({
-	userId,
-}: {
-	userId: string;
-}): Promise<Array<Task> | null> {
+export async function getTodaysTasks(
+	userId: string
+): Promise<Array<Task> | null> {
 	const todaysDate = new Date();
-	const todaysTasks = db.task.findMany({
-		where: { userId, dueDate: todaysDate },
-		select: {
-			id: true,
-			title: true,
-			description: true,
-			completed: true,
-			dueDate: true,
-			priority: true,
+
+	const startOfDay = new Date(
+		todaysDate.getFullYear(),
+		todaysDate.getMonth(),
+		todaysDate.getDate(),
+		0,
+		0,
+		0,
+		0
+	);
+
+	const endOfDay = new Date(
+		todaysDate.getFullYear(),
+		todaysDate.getMonth(),
+		todaysDate.getDate(),
+		23,
+		59,
+		59,
+		999
+	);
+
+	console.log("Dates:", startOfDay, endOfDay);
+	const todaysTasks = await db.task.findMany({
+		where: {
+			userId,
+			dueDate: {
+				gte: startOfDay, // Greater than or equal to start of the day
+				lte: endOfDay, // Less than or equal to end of the day
+			},
 		},
 	});
 

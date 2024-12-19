@@ -10,7 +10,6 @@ import {
 	Settings,
 } from "lucide-react";
 import { ReactElement } from "react";
-import AddList from "../lists/AddList";
 import SidebarLink from "./SideBarLink";
 import { Button } from "../ui/button";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -48,13 +47,13 @@ const sidebarItems: sideBarProps[] = [
 		hasSubMenu: false,
 		isLink: true,
 	},
-	{
-		title: "Calendar",
-		path: "/calendar",
-		icon: <CalendarDays size={SIDEBARICONSIZE} />,
-		hasSubMenu: false,
-		isLink: true,
-	},
+	// {
+	// 	title: "Calendar",
+	// 	path: "/calendar",
+	// 	icon: <CalendarDays size={SIDEBARICONSIZE} />,
+	// 	hasSubMenu: false,
+	// 	isLink: true,
+	// },
 	{
 		title: "Lists",
 		path: "/lists",
@@ -119,8 +118,6 @@ const Sidebar = () => {
 								: ""}
 						</div>
 					))}
-					{}
-					<AddList variant={"sidebar"} />
 				</>
 			</nav>
 			<div className="flex flex-col items-center justify-center mt-auto">
