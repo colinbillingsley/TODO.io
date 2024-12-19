@@ -115,7 +115,7 @@ export async function createTask(
 	priority: Priority,
 	userId: string
 ) {
-	const newTask = db.task.create({
+	const newTask = await db.task.create({
 		data: {
 			title,
 			description,
@@ -127,4 +127,33 @@ export async function createTask(
 	});
 
 	return newTask;
+}
+
+export async function countUserTasks(userId: string) {
+	const numTasks = await db.task.count({
+		where: {
+			userId,
+		},
+	});
+	return numTasks;
+}
+
+export async function countUserTasksCompleted(userId: string) {
+	const numTasks = await db.task.count({
+		where: {
+			userId,
+			completed: true,
+		},
+	});
+	return numTasks;
+}
+
+export async function countUserTasksTodo(userId: string) {
+	const numTasks = await db.task.count({
+		where: {
+			userId,
+			completed: false,
+		},
+	});
+	return numTasks;
 }
