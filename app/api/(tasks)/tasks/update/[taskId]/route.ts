@@ -8,7 +8,9 @@ export async function PUT(
 ) {
 	try {
 		const { taskId } = await params;
-		const { editedTask } = await req.json();
+		const editedTask = await req.json();
+
+		console.log(editedTask);
 
 		if (!taskId) {
 			NextResponse.json(

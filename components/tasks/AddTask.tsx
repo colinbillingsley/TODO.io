@@ -31,7 +31,7 @@ const AddTask = ({
 					<Plus size={20} />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px]">
+			<DialogContent className="max-w-[600px] h-[98%] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle>Add a Task</DialogTitle>
 					<DialogDescription>Add a task to do for the list.</DialogDescription>

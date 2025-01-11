@@ -1,11 +1,10 @@
-"use client";
-import { useState } from "react";
-import { Input } from "../ui/input";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import LoadingSpinner from "../login/LoadingSpinner";
-import { Task } from "@prisma/client";
-import { Priority } from "@prisma/client";
-import { useAuthContext } from "@/app/context/AuthContext";
+import { toast } from "sonner";
+import dayjs from "dayjs";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Calendar } from "../ui/calendar";
 import {
 	Select,
 	SelectContent,
@@ -13,34 +12,42 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { Calendar } from "../ui/calendar";
-import dayjs from "dayjs";
-import { toast } from "sonner";
+import { Priority, Task } from "@prisma/client";
+import LoadingSpinner from "../login/LoadingSpinner";
 
-const AddTaskForm = ({
-	projectId,
-	userId,
-	setListTasks,
+const EditTaskForm = ({
+	task,
 	setIsOpen,
+	listTasks,
+	setListTasks,
 }: {
-	projectId: string;
-	userId: string;
-	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+	task: Task;
 	setIsOpen: (param: boolean) => void;
+	listTasks: Task[];
+	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }) => {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-	const [priority, setPriority] = useState<Priority>(Priority.LOW);
+	const [title, setTitle] = useState(task.title);
+	const [description, setDescription] = useState(task.description);
+	const [dueDate, setDueDate] = useState<Date | undefined>(task.dueDate);
+	const [priority, setPriority] = useState<Priority>(task.priority);
 
 	const [titleError, setTitleError] = useState(false);
 	const [descriptionError, setDescriptionError] = useState(false);
 	const [dateError, setDateError] = useState(false);
 	const [errors, setErrors] = useState(false);
-
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { user } = useAuthContext();
+
+	const resetFields = () => {
+		setTitle(task.title);
+		setDescription(task.description);
+		setDueDate(task.dueDate);
+		setPriority(task.priority);
+
+		setTitleError(false);
+		setDescriptionError(false);
+		setDateError(false);
+		setErrors(false);
+	};
 
 	const determineErrors = async () => {
 		// Validate fields
@@ -51,7 +58,7 @@ const AddTaskForm = ({
 			hasError = true;
 		}
 
-		if (description.trim() === "") {
+		if (description?.trim() === "") {
 			setDescriptionError(true);
 			hasError = true;
 		}
@@ -64,8 +71,24 @@ const AddTaskForm = ({
 		return hasError;
 	};
 
-	const addTask = (newTask: Task) => {
-		setListTasks((prevTasks: Task[]) => [...prevTasks, newTask]);
+	const handelCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		setIsOpen(false);
+		resetFields();
+	};
+
+	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		setIsOpen(false);
+	};
+
+	const editTasks = async (updatedTask: Task) => {
+		const id = updatedTask.id;
+		setListTasks((prevListTasks) =>
+			prevListTasks.map((task) =>
+				task.id === id ? { ...task, ...updatedTask } : task
+			)
+		);
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -75,19 +98,20 @@ const AddTaskForm = ({
 			const errors = await determineErrors();
 			if (errors) return;
 
-			const newTask = {
+			const updatedTask: Task = {
+				...task,
 				title,
 				description,
 				dueDate,
 				priority,
 			};
 
-			const res = await fetch(`/api/tasks/create/${projectId}/${userId}`, {
-				method: "POST",
+			const res = await fetch(`/api/tasks/update/${task.id}`, {
+				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(newTask),
+				body: JSON.stringify(updatedTask),
 			});
 
 			if (!res.ok) {
@@ -97,10 +121,11 @@ const AddTaskForm = ({
 			}
 
 			const data = await res.json();
-			addTask(data);
+			editTasks(updatedTask);
 			setIsOpen(false);
-			toast("Task has been created", {
-				description: `${dayjs(data.createdAt)
+
+			toast(`${task.title} has been edited`, {
+				description: `${dayjs(new Date())
 					.format("dddd, MMMM DD, YYYY [at] h:mm A")
 					.toString()}`,
 			});
@@ -112,7 +137,7 @@ const AddTaskForm = ({
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-8 w-full">
+		<form onSubmit={handleSubmit} className="space-y-8 px-4">
 			<div>
 				<label
 					className={`block text-sm font-semibold mb-2 ${
@@ -148,7 +173,7 @@ const AddTaskForm = ({
 				</label>
 				<Textarea
 					placeholder="Enter task description"
-					value={description}
+					value={description || ""}
 					onChange={(e) => {
 						setDescriptionError(false);
 						setDescription(e.target.value);
@@ -200,7 +225,7 @@ const AddTaskForm = ({
 				<label className="block text-sm font-semibold mb-2">Priority</label>
 				<Select
 					onValueChange={(value) => setPriority(value as Priority)}
-					defaultValue={Priority.LOW}
+					defaultValue={priority}
 				>
 					<SelectTrigger className="w-full">
 						<SelectValue placeholder="Select priority" />
@@ -214,18 +239,30 @@ const AddTaskForm = ({
 			</div>
 
 			{/* Submit Button */}
-			<Button type="submit" className="w-full" disabled={isLoading}>
-				{isLoading ? (
-					<span className="flex items-center justify-center">
-						<LoadingSpinner size={20} className="mr-2" />
-						Creating task...
-					</span>
-				) : (
-					"Create Task"
-				)}
-			</Button>
+			<div className="flex items-center justify-end gap-3">
+				<Button variant={"outline"} onClick={handelCancel}>
+					Cancel
+				</Button>
+				<Button
+					variant={"outline"}
+					className="border-red-500 text-red-500 hover:bg-red-100"
+					onClick={handleDelete}
+				>
+					Delete
+				</Button>
+				<Button type="submit" className="font-semibold" disabled={isLoading}>
+					{isLoading ? (
+						<span className="flex items-center justify-center">
+							<LoadingSpinner size={20} className="mr-2" />
+							Editing task...
+						</span>
+					) : (
+						"Save Changes"
+					)}
+				</Button>
+			</div>
 		</form>
 	);
 };
 
-export default AddTaskForm;
+export default EditTaskForm;

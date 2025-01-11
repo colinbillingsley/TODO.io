@@ -94,7 +94,7 @@ const TaskCard = ({
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ editedTask }), // Ensure it's wrapped correctly
+				body: JSON.stringify(editedTask), // Ensure it's wrapped correctly
 			});
 
 			if (!res.ok) {
@@ -134,7 +134,11 @@ const TaskCard = ({
 						<TooltipProvider>
 							<Tooltip delayDuration={100}>
 								<TooltipTrigger asChild>
-									<EditTask task={task} />
+									<EditTask
+										task={task}
+										listTasks={listTasks}
+										setListTasks={setListTasks}
+									/>
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Edit</p>
