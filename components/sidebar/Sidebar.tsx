@@ -69,6 +69,7 @@ const Sidebar = () => {
 	const router = useRouter();
 
 	const handleLogout = async () => {
+		router.push("/login");
 		logoutUser();
 	};
 
@@ -121,10 +122,6 @@ const Sidebar = () => {
 				</>
 			</nav>
 			<div className="flex flex-col items-center justify-center mt-auto">
-				<Button variant={"sidebar"}>
-					<Settings size={SIDEBARICONSIZE} />
-					<span className="hidden sm:block">Settings</span>
-				</Button>
 				<Button variant={"sidebar"} onClick={handleLogout}>
 					<LogOut size={SIDEBARICONSIZE} />
 					<span className="hidden sm:block">Logout</span>

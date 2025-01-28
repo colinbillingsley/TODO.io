@@ -253,7 +253,7 @@ const ListPage = () => {
 						/>
 					</div>
 
-					<div className="">
+					<>
 						{filteredTasks?.length > 0 ? (
 							<div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
 								{filteredTasks.map((task, index) => (
@@ -266,12 +266,12 @@ const ListPage = () => {
 								))}
 							</div>
 						) : (
-							<div className="w-full h-96 flex flex-col items-center justify-center gap-1 text-accent-foreground/50">
+							<div className="w-full h-full flex flex-col items-center justify-center gap-1 text-accent-foreground/50 bg-white/75 rounded-md">
 								<Logs size={20} />
 								<span>No tasks for list!</span>
 							</div>
 						)}
-					</div>
+					</>
 				</>
 			)}
 		</>

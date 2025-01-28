@@ -10,6 +10,7 @@ import { useListContext } from "@/app/context/ListContext";
 import ListFilters from "@/components/lists/ListFilters";
 import AddList from "@/components/lists/AddList";
 import { Input } from "@/components/ui/input";
+import { Logs } from "lucide-react";
 
 export interface ListWithNum {
 	list: List;
@@ -162,20 +163,25 @@ const Lists = () => {
 							}}
 						/>
 					</div>
-					<div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] mt-5">
-						{filteredLists.length > 0
-							? filteredLists.map(({ list, numTasks }, index) => (
-									<ListCard
-										list={list}
-										numTasks={numTasks}
-										key={index}
-										setLists={setLists}
-										filteredLists={filteredLists}
-										setFilteredLists={setFilteredLists}
-									/>
-							  ))
-							: ""}
-					</div>
+					{filteredLists.length > 0 ? (
+						<div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] mt-5">
+							{filteredLists.map(({ list, numTasks }, index) => (
+								<ListCard
+									list={list}
+									numTasks={numTasks}
+									key={index}
+									setLists={setLists}
+									filteredLists={filteredLists}
+									setFilteredLists={setFilteredLists}
+								/>
+							))}
+						</div>
+					) : (
+						<div className="w-full h-full flex flex-col items-center justify-center gap-1 text-accent-foreground/50 bg-white/75 rounded-md mt-5">
+							<Logs size={20} />
+							<span>No lists have been created!</span>
+						</div>
+					)}
 				</>
 			)}
 		</>

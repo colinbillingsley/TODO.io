@@ -35,7 +35,12 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json(
 			{
 				message: "User registered successfully",
-				user: { id: newUser.id, username: newUser.username },
+				user: {
+					id: newUser.id,
+					username: newUser.username,
+					firstName: newUser.firstName,
+					lastName: newUser.lastName,
+				},
 			},
 			{ status: 201 }
 		);

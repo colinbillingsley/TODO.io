@@ -54,3 +54,13 @@ export async function createNewUser({
 
 	return newUser;
 }
+
+export async function deleteUser(userId: string) {
+	const userToDelete = await db.user.delete({
+		where: {
+			id: userId,
+		},
+	});
+
+	return userToDelete;
+}

@@ -66,6 +66,7 @@ const ListCard = ({
 						href={`/lists/${list.name.split(" ").join("-")}?projectId=${
 							list.id
 						}`}
+						prefetch={false}
 						className="hover:underline underline-offset-4 w-fit"
 					>
 						<CardTitle>{truncateText(list.name, 16)}</CardTitle>

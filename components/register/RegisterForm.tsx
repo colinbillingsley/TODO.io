@@ -195,7 +195,7 @@ const RegisterForm = () => {
 				<div className="flex gap-2 items-center justify-end">
 					<span className="">Already have an account? </span>
 
-					<Link href={"/login"} className="group">
+					<Link href={"/login"} className="group" prefetch={false}>
 						<Button variant={"outline"} className="h-fit px-4 py-2">
 							<span>Login</span>
 							<ArrowRight className="group-hover:translate-x-1 transition-transform" />

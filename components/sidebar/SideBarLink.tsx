@@ -24,6 +24,7 @@ const SidebarLink = ({ title, path, icon }: SidebarLinkProps) => {
 						: "hover:bg-primary-foreground/25 hover:text-primary-foreground active:bg-primary-foreground/50 active:text-primary-foreground"
 				}
 			`}
+			prefetch={false}
 		>
 			{icon}
 			<span className="hidden sm:block">{title}</span>

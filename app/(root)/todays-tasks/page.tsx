@@ -60,7 +60,7 @@ const TodaysTasks = () => {
 							))}
 						</div>
 					) : (
-						<div className="w-full h-96 flex flex-col items-center justify-center gap-1 text-accent-foreground/50">
+						<div className="w-full h-full flex flex-col items-center justify-center gap-1 text-accent-foreground/50 bg-white/75 rounded-md mt-5">
 							<Logs size={20} />
 							<span>No tasks for today!</span>
 						</div>
