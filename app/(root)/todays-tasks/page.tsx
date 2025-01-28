@@ -5,14 +5,39 @@ import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import TaskCard from "@/components/tasks/TaskCard";
 import withAuth from "@/hoc/withAuth";
-import { Task } from "@prisma/client";
+import { Priority, Task } from "@prisma/client";
 import { Logs } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import {
+	sortDatesAscending,
+	sortDatesCreatedAscending,
+	sortDatesCreatedDescending,
+	sortDatesDescending,
+} from "../lists/[listName]/page";
+import TaskFilters from "@/components/tasks/TaskFilters";
+import { Input } from "@/components/ui/input";
 
 const TodaysTasks = () => {
 	const [loadingTasks, setLoadingTasks] = useState(false);
 	const { user } = useAuthContext();
+
 	const [tasks, setTasks] = useState<Task[]>([]);
+	const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
+
+	const [selectedPriority, setSelectedPriority] = useState<
+		Priority | undefined
+	>(undefined);
+	const [selectedStatus, setSelectedStatus] = useState<string | undefined>(
+		undefined
+	);
+	const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
+	const [searchText, setSearchText] = useState<string>("");
+
+	const clearFilters = () => {
+		setSelectedPriority(undefined);
+		setSelectedStatus(undefined);
+		setDateFilter(undefined);
+	};
 
 	const getTodaysTasks = async () => {
 		setLoadingTasks(true);
@@ -32,9 +57,55 @@ const TodaysTasks = () => {
 		}
 	};
 
+	const determineTaskFilters = () => {
+		let filtered: Task[] = [...tasks];
+
+		if (selectedPriority) {
+			filtered = filtered.filter((task) => task.priority === selectedPriority);
+		}
+		if (selectedStatus) {
+			filtered = filtered.filter(
+				(task) => task.completed.toString() === selectedStatus
+			);
+		}
+		if (dateFilter) {
+			switch (dateFilter) {
+				case "ascending":
+					sortDatesAscending(filtered);
+					break;
+				case "descending":
+					sortDatesDescending(filtered);
+					break;
+				case "createdAscending":
+					sortDatesCreatedAscending(filtered);
+					break;
+				case "createdDescending":
+					sortDatesCreatedDescending(filtered);
+					break;
+				default:
+					break; // No date filter applied
+			}
+		} else {
+			sortDatesAscending(filtered);
+		}
+
+		if (searchText) {
+			const lowerCaseSearch = searchText.toLowerCase();
+			filtered = filtered.filter((task) =>
+				task.title.toLowerCase().includes(lowerCaseSearch)
+			);
+		}
+		return filtered || [];
+	};
+
 	useEffect(() => {
 		getTodaysTasks();
 	}, []);
+
+	useEffect(() => {
+		const filtered = determineTaskFilters();
+		setFilteredTasks(filtered);
+	}, [selectedPriority, selectedStatus, dateFilter, searchText, tasks]);
 
 	return (
 		<>
@@ -48,9 +119,28 @@ const TodaysTasks = () => {
 			) : (
 				<>
 					<PageTitle>Today&apos;s Tasks</PageTitle>
-					{tasks.length > 0 ? (
+					<div className="w-full text-center mb-5 flex flex-col lg:flex-row items-center gap-3">
+						<TaskFilters
+							selectedPriority={selectedPriority}
+							selectedStatus={selectedStatus}
+							dateFilter={dateFilter}
+							setSelectedPriority={setSelectedPriority}
+							setSelectedStatus={setSelectedStatus}
+							setDateFilter={setDateFilter}
+							clearFilters={clearFilters}
+						/>
+						<Input
+							type="input"
+							placeholder="Search..."
+							className="ml-auto h-fit py-2 bg-white"
+							onChange={(e) => {
+								setSearchText(e.target.value);
+							}}
+						/>
+					</div>
+					{filteredTasks.length > 0 ? (
 						<div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-							{tasks.map((task, index) => (
+							{filteredTasks.map((task, index) => (
 								<TaskCard
 									task={task}
 									key={index}
