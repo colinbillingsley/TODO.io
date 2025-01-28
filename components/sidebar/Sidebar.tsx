@@ -20,9 +20,6 @@ interface sideBarProps {
 	title: string;
 	path: string;
 	icon: ReactElement;
-	hasSubMenu: boolean;
-	subMenu?: Array<sideBarProps>;
-	isLink: boolean;
 }
 
 const sidebarItems: sideBarProps[] = [
@@ -30,22 +27,16 @@ const sidebarItems: sideBarProps[] = [
 		title: "Dashboard",
 		path: "/",
 		icon: <LayoutDashboard size={SIDEBARICONSIZE} />,
-		hasSubMenu: false,
-		isLink: true,
 	},
 	{
 		title: "Today's Tasks",
 		path: "/todays-tasks",
 		icon: <CircleCheckBig size={SIDEBARICONSIZE} />,
-		hasSubMenu: false,
-		isLink: true,
 	},
 	{
 		title: "Upcoming Tasks",
 		path: "/upcoming-tasks",
 		icon: <Clock size={SIDEBARICONSIZE} />,
-		hasSubMenu: false,
-		isLink: true,
 	},
 	// {
 	// 	title: "Calendar",
@@ -58,9 +49,6 @@ const sidebarItems: sideBarProps[] = [
 		title: "Lists",
 		path: "/lists",
 		icon: <FolderKanban size={SIDEBARICONSIZE} />,
-		hasSubMenu: true,
-		subMenu: [],
-		isLink: true,
 	},
 ];
 
@@ -73,13 +61,6 @@ const Sidebar = () => {
 		logoutUser();
 	};
 
-	const subMenuGreaterThanOne = (menu: sideBarProps | undefined): boolean => {
-		if (menu?.subMenu) {
-			if (menu.subMenu.length > 0) return true;
-			return false;
-		}
-		return false;
-	};
 	return (
 		<div className="flex flex-col h-full w-20 sm:w-56 p-4 bg-primary text-primary-foreground">
 			<>
@@ -104,19 +85,6 @@ const Sidebar = () => {
 								icon={item.icon}
 								path={item.path}
 							/>
-							{item.hasSubMenu
-								? subMenuGreaterThanOne(item.subMenu)
-									? item.subMenu?.map((sub) => (
-											<div key={sub.title}>
-												<SidebarLink
-													title={sub.title}
-													icon={sub.icon}
-													path={sub.path}
-												/>
-											</div>
-									  ))
-									: ""
-								: ""}
 						</div>
 					))}
 				</>

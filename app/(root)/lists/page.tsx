@@ -21,8 +21,13 @@ const Lists = () => {
 	const { user } = useAuthContext();
 	const { fetchLists } = useListContext();
 	const [isLoading, setIsLoading] = useState(false);
+
 	const [lists, setLists] = useState<List[]>([]);
+	const [listsWithTaskCounts, setListWithTaskCounts] = useState<ListWithNum[]>(
+		[]
+	);
 	const [filteredLists, setFilteredLists] = useState<ListWithNum[]>([]);
+
 	const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
 	const [searchText, setSearchText] = useState<string | undefined>("");
 
@@ -71,12 +76,12 @@ const Lists = () => {
 			setLists([...recLists]);
 
 			// Fetch task counts for each list
-			const listsWithTaskCounts: ListWithNum[] = await getListTaskAmounts(
-				recLists
-			);
+			const resLists: ListWithNum[] = await getListTaskAmounts(recLists);
 
-			sortDatesAscending(listsWithTaskCounts);
-			setFilteredLists(listsWithTaskCounts);
+			setListWithTaskCounts(resLists);
+			setFilteredLists(resLists);
+			sortDatesAscending(resLists);
+			setFilteredLists(resLists);
 		} catch (error) {
 			console.error(error);
 			setIsLoading(false);
@@ -94,7 +99,7 @@ const Lists = () => {
 	};
 
 	const determineFilters = () => {
-		let filtered = [...filteredLists];
+		let filtered: ListWithNum[] = [...listsWithTaskCounts];
 		if (dateFilter) {
 			switch (dateFilter) {
 				case "ascending":
@@ -116,7 +121,7 @@ const Lists = () => {
 				list.list.name.toLowerCase().includes(lowerCaseSearch)
 			);
 		}
-		return filtered;
+		return filtered || [];
 	};
 
 	useEffect(() => {
@@ -125,6 +130,7 @@ const Lists = () => {
 
 	useEffect(() => {
 		const filtered = determineFilters();
+		console.log(filtered);
 		setFilteredLists(filtered);
 	}, [searchText, dateFilter, lists]);
 
