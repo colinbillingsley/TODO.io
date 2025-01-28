@@ -1,18 +1,46 @@
 "use client";
 import { useAuthContext } from "@/app/context/AuthContext";
 import LoadingSpinner from "@/components/login/LoadingSpinner";
-import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import TaskCard from "@/components/tasks/TaskCard";
 import withAuth from "@/hoc/withAuth";
 import { Task } from "@prisma/client";
 import { Logs } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const UpcomingTasks = () => {
 	const [loadingTasks, setLoadingTasks] = useState(false);
 	const { user } = useAuthContext();
 	const [tasks, setTasks] = useState<Task[]>([]);
+
+	const sortDatesAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+		);
+	};
+
+	const getUpcomingTasks = async () => {
+		setLoadingTasks(true);
+		try {
+			const res = await fetch(`/api/tasks/user/${user?.id}/upcoming`, {
+				method: "GET",
+				headers: { "Content-Type": "application/json" },
+			});
+
+			if (res.ok) {
+				const upcomingTasks = await res.json();
+				sortDatesAscending(upcomingTasks);
+				setTasks(upcomingTasks);
+			}
+			setLoadingTasks(false);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	useEffect(() => {
+		getUpcomingTasks();
+	}, []);
 
 	return (
 		<>

@@ -130,7 +130,6 @@ const Lists = () => {
 
 	useEffect(() => {
 		const filtered = determineFilters();
-		console.log(filtered);
 		setFilteredLists(filtered);
 	}, [searchText, dateFilter, lists]);
 

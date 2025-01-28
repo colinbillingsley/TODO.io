@@ -46,6 +46,16 @@ export async function updateTask(taskId: string, updatedTask: Task) {
 	return taskBeingUpdated;
 }
 
+export async function deleteTask(taskId: string) {
+	const deletedTask = db.task.delete({
+		where: {
+			id: taskId,
+		},
+	});
+
+	return deletedTask;
+}
+
 export async function getProjectTasks(projectId: string) {
 	const projectTasks = await db.task.findMany({
 		where: { projectId },
@@ -93,7 +103,6 @@ export async function getTodaysTasks(
 		999
 	);
 
-	console.log("Dates:", startOfDay, endOfDay);
 	const todaysTasks = await db.task.findMany({
 		where: {
 			userId,
@@ -105,6 +114,50 @@ export async function getTodaysTasks(
 	});
 
 	return todaysTasks;
+}
+
+/**
+ * Retrieves all tasks that are due within the current week (including today).
+ *
+ * @param {string} userId - The userId for retrieving tasks made by the user.
+ * @returns {Promise<Array<Task> | null>} - A promise that resolves to an array of tasks created by the user.
+ */
+export async function getUpcomingTasks(
+	userId: string
+): Promise<Array<Task> | null> {
+	const todaysDate = new Date();
+
+	const startOfWeek = new Date(
+		todaysDate.getFullYear(),
+		todaysDate.getMonth(),
+		todaysDate.getDate(),
+		0,
+		0,
+		0,
+		0
+	);
+
+	const endOfWeek = new Date(
+		todaysDate.getFullYear(),
+		todaysDate.getMonth(),
+		todaysDate.getDate() + 6, // 6 days from today (end of the week)
+		23,
+		59,
+		59,
+		999
+	);
+
+	const weeklyTasks = await db.task.findMany({
+		where: {
+			userId,
+			dueDate: {
+				gte: startOfWeek, // Greater than or equal to start of the week
+				lte: endOfWeek, // Less than or equal to end of the week
+			},
+		},
+	});
+
+	return weeklyTasks;
 }
 
 export async function createTask(

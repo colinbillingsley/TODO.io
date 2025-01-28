@@ -35,7 +35,9 @@ const EditTaskForm = ({
 	const [descriptionError, setDescriptionError] = useState(false);
 	const [dateError, setDateError] = useState(false);
 	const [errors, setErrors] = useState(false);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const [editLoading, setEditLoading] = useState<boolean>(false);
+	const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
 	const resetFields = () => {
 		setTitle(task.title);
@@ -77,9 +79,38 @@ const EditTaskForm = ({
 		resetFields();
 	};
 
-	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		setIsOpen(false);
+		setDeleteLoading(true);
+		try {
+			const res = await fetch(`/api/tasks/delete/${task.id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (res.ok) {
+				const deletedTask = await res.json();
+				removeDeltedTaskFromTasks(deletedTask.id);
+				toast(`${task.title} has been deleted`, {
+					description: `${dayjs(new Date())
+						.format("dddd, MMMM DD, YYYY [at] h:mm A")
+						.toString()}`,
+				});
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setDeleteLoading(false);
+			setIsOpen(false);
+		}
+	};
+
+	const removeDeltedTaskFromTasks = (taskId: string) => {
+		setListTasks((prevListTasks) =>
+			prevListTasks.filter((task) => task.id !== taskId)
+		);
 	};
 
 	const editTasks = async (updatedTask: Task) => {
@@ -93,7 +124,7 @@ const EditTaskForm = ({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsLoading(true);
+		setEditLoading(true);
 		try {
 			const errors = await determineErrors();
 			if (errors) return;
@@ -132,7 +163,7 @@ const EditTaskForm = ({
 		} catch (error) {
 			console.error(error);
 		} finally {
-			setIsLoading(false);
+			setEditLoading(false);
 		}
 	};
 
@@ -247,11 +278,19 @@ const EditTaskForm = ({
 					variant={"outline"}
 					className="border-red-500 text-red-500 hover:bg-red-100"
 					onClick={handleDelete}
+					disabled={deleteLoading}
 				>
-					Delete
+					{deleteLoading ? (
+						<span className="flex items-center justify-center">
+							<LoadingSpinner size={20} className="mr-2 border-red-500" />
+							Deleting task...
+						</span>
+					) : (
+						"Delete"
+					)}
 				</Button>
-				<Button type="submit" className="font-semibold" disabled={isLoading}>
-					{isLoading ? (
+				<Button type="submit" className="font-semibold" disabled={editLoading}>
+					{editLoading ? (
 						<span className="flex items-center justify-center">
 							<LoadingSpinner size={20} className="mr-2" />
 							Editing task...

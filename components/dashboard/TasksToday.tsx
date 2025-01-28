@@ -46,7 +46,7 @@ const TasksToday = ({ tasks }: { tasks: Task[] }) => {
 	return (
 		<Card
 			className={cn(
-				`p-4 min-w-[18rem] h-[18rem] shadow-none border-none flex-1`
+				`p-4 min-w-[18rem] h-[18rem] shadow-none border-none flex-1 overflow-y-hidden`
 			)}
 		>
 			<CardHeader>
@@ -62,14 +62,14 @@ const TasksToday = ({ tasks }: { tasks: Task[] }) => {
 				<CardDescription>{todaysDate.toDateString()}</CardDescription>
 			</CardHeader>
 
-			<CardContent className="flex flex-col items-start justify-center gap-2 w-full text-sm">
+			<CardContent className="flex flex-col items-start justify-center gap-2 w-full h-[10rem] text-sm">
 				{tasks.length === 0 ? (
 					<div className="flex flex-col items-center justify-center gap-1 w-full text-accent-foreground/50">
 						<Logs size={20} />
 						<span>No tasks for today!</span>
 					</div>
 				) : (
-					<ul className="w-full flex flex-col gap-2">
+					<ul className="w-full h-full flex flex-col gap-2 overflow-y-auto">
 						{tasks.map((task, index) => (
 							<li
 								key={index}
