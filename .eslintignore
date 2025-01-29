@@ -1,3 +1,5 @@
-app/components/ui
+components/ui/
 lib/
 app/api/
+hoc/
+tailwind.config.ts
