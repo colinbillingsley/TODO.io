@@ -23,6 +23,7 @@ const Lists = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [lists, setLists] = useState<List[]>([]);
+
 	const [listsWithTaskCounts, setListWithTaskCounts] = useState<ListWithNum[]>(
 		[]
 	);
@@ -151,7 +152,7 @@ const Lists = () => {
 								variant={"default"}
 								className="h-fit py-2"
 								setLists={setLists}
-								setFilteredLists={setFilteredLists}
+								setListWithTaskCounts={setListWithTaskCounts}
 							/>
 							<ListFilters
 								dateFilter={dateFilter}
@@ -177,7 +178,7 @@ const Lists = () => {
 									key={index}
 									setLists={setLists}
 									filteredLists={filteredLists}
-									setFilteredLists={setFilteredLists}
+									setListWithTaskCounts={setListWithTaskCounts}
 								/>
 							))}
 						</div>

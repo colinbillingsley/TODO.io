@@ -20,7 +20,7 @@ const AddList = ({
 	variant,
 	className,
 	setLists,
-	setFilteredLists,
+	setListWithTaskCounts,
 }: {
 	variant:
 		| "link"
@@ -34,7 +34,7 @@ const AddList = ({
 		| undefined;
 	className?: string;
 	setLists?: React.Dispatch<React.SetStateAction<List[]>>;
-	setFilteredLists?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
+	setListWithTaskCounts?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -60,7 +60,7 @@ const AddList = ({
 					<AddListForm
 						setIsOpen={setIsOpen}
 						setLists={setLists}
-						setFilteredLists={setFilteredLists}
+						setListWithTaskCounts={setListWithTaskCounts}
 					/>
 				</>
 				<DialogFooter></DialogFooter>

@@ -20,13 +20,13 @@ const ListCard = ({
 	numTasks,
 	setLists,
 	filteredLists,
-	setFilteredLists,
+	setListWithTaskCounts,
 }: {
 	list: List;
 	numTasks: number;
 	setLists: React.Dispatch<React.SetStateAction<List[]>>;
 	filteredLists: ListWithNum[];
-	setFilteredLists: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
+	setListWithTaskCounts: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const truncateText = (text: string | null, maxLength: number) => {
 		if (text) {
@@ -56,7 +56,7 @@ const ListCard = ({
 					list={list}
 					setLists={setLists}
 					filteredLists={filteredLists}
-					setFilteredLists={setFilteredLists}
+					setListWithTaskCounts={setListWithTaskCounts}
 				/>
 			</div>
 

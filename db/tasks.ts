@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { Task } from "@/types";
 import { Priority } from "@prisma/client";
+import dayjs from "dayjs";
 
 /**
  * Retrieves all tasks created by a specific user.
@@ -27,6 +28,26 @@ export async function getAllUserTasks({
 	});
 
 	return allUserTasks;
+}
+
+export async function getUsersWeekTasks(userId: string) {
+	const startOfWeek = dayjs().startOf("week").toISOString(); // Sunday at 00:00
+	const endOfWeek = dayjs().endOf("week").toISOString(); // Saturday at 23:59
+
+	const tasks = await db.task.findMany({
+		where: {
+			userId,
+			dueDate: {
+				gte: startOfWeek,
+				lte: endOfWeek,
+			},
+		},
+		orderBy: {
+			dueDate: "asc",
+		},
+	});
+
+	return tasks;
 }
 
 export async function updateTask(taskId: string, updatedTask: Task) {

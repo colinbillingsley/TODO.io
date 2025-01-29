@@ -22,13 +22,13 @@ const DeleteList = ({
 	list,
 	setLists,
 	filteredLists,
-	setFilteredLists,
+	setListWithTaskCounts,
 }: {
 	onClick: (p: any) => void;
 	list: List;
 	setLists: React.Dispatch<React.SetStateAction<List[]>>;
 	filteredLists: ListWithNum[];
-	setFilteredLists: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
+	setListWithTaskCounts: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { lists, removeList } = useListContext();
@@ -36,10 +36,13 @@ const DeleteList = ({
 
 	const updateLists = async (updatedList: List[]) => {
 		setLists(updatedList);
-		setFilteredLists(filteredLists.filter((item) => item.list.id !== list.id));
+		setListWithTaskCounts(
+			filteredLists.filter((item) => item.list.id !== list.id)
+		);
 	};
 
-	const handleDeleteList = async () => {
+	const handleDeleteList = async (e: React.MouseEvent) => {
+		e.preventDefault();
 		setIsLoading(true);
 		try {
 			const res = await fetch(`/api/lists/delete/${list.id}`, {
@@ -59,6 +62,7 @@ const DeleteList = ({
 			setIsLoading(false);
 		} catch (error) {
 			console.error(error);
+			setIsLoading(false);
 		}
 	};
 
@@ -88,6 +92,7 @@ const DeleteList = ({
 					<AlertDialogAction
 						className="bg-red-500 hover:bg-red-600"
 						onClick={handleDeleteList}
+						disabled={isLoading}
 					>
 						{isLoading ? (
 							<span className="flex items-center gap-3">

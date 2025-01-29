@@ -34,8 +34,8 @@ const sidebarItems: sideBarProps[] = [
 		icon: <CircleCheckBig size={SIDEBARICONSIZE} />,
 	},
 	{
-		title: "Upcoming Tasks",
-		path: "/upcoming-tasks",
+		title: "Weekly Tasks",
+		path: "/weekly-tasks",
 		icon: <Clock size={SIDEBARICONSIZE} />,
 	},
 	// {
@@ -57,7 +57,7 @@ const Sidebar = () => {
 	const router = useRouter();
 
 	const handleLogout = async () => {
-		router.push("/login");
+		router.replace("/login");
 		logoutUser();
 	};
 

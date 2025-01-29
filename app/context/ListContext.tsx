@@ -27,7 +27,6 @@ export const ListContextProvider: React.FC<{ children: ReactNode }> = ({
 			});
 			if (res.ok) {
 				const data = await res.json();
-				console.log(data);
 				setLists(data);
 				listArr = [...data];
 			}

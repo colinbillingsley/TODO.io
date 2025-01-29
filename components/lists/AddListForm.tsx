@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 
 const listSchema = z.object({
 	name: z.string().min(1, { message: "Name is required" }),
-	description: z.string(),
+	description: z.string().min(1, { message: "Description is required" }),
 });
 
 type ListFormValues = z.infer<typeof listSchema>;
@@ -31,69 +31,74 @@ type ListFormValues = z.infer<typeof listSchema>;
 const AddListForm = ({
 	setIsOpen,
 	setLists,
-	setFilteredLists,
+	setListWithTaskCounts,
 }: {
 	setIsOpen: (state: boolean) => void;
 	setLists?: React.Dispatch<React.SetStateAction<List[]>>;
-	setFilteredLists?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
+	setListWithTaskCounts?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<String>("");
 	const { user } = useAuthContext();
 	const { addList } = useListContext();
 
+	const defaultValues = useMemo(() => ({ name: "", description: "" }), []);
+
 	const form = useForm<ListFormValues>({
 		resolver: zodResolver(listSchema),
-		defaultValues: {
-			name: "",
-			description: "",
-		},
+		defaultValues,
 	});
 
-	const onSubmit = async (values: ListFormValues) => {
-		setIsLoading(true);
-		setErrorMessage("");
+	const onSubmit = useCallback(
+		async (values: ListFormValues) => {
+			setIsLoading(true);
+			setErrorMessage("");
 
-		try {
-			const payload = { ...values, userId: user?.id };
+			try {
+				const payload = { ...values, userId: user?.id };
 
-			const res = await fetch("/api/lists", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(payload),
-			});
+				const res = await fetch("/api/lists", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(payload),
+				});
 
-			if (!res.ok) {
-				const errorData = await res.json();
-				setErrorMessage(errorData.message || "Error creating list.");
-				return;
+				if (!res.ok) {
+					const errorData = await res.json();
+					setErrorMessage(errorData.message || "Error creating list.");
+					return;
+				}
+
+				const data = await res.json();
+				// add list to the list context
+				setLists?.((prev) => (prev ? [...prev, data] : [data]));
+				setListWithTaskCounts?.((prev) =>
+					prev
+						? [...prev, { list: data, numTasks: 0 }]
+						: [{ list: data, numTasks: 0 }]
+				);
+
+				addList(data);
+
+				toast("List has been created", {
+					description: `${dayjs(data.createdAt)
+						.format("dddd, MMMM DD, YYYY [at] h:mm A")
+						.toString()}`,
+				});
+				setIsOpen(false);
+				form.reset();
+			} catch (error) {
+				console.error("List creation error:", error);
+				setErrorMessage("An unexpected error occurred.");
+				setIsLoading(false);
+			} finally {
+				setIsLoading(false);
 			}
-
-			const data = await res.json();
-			// add list to the list context
-			addList(data);
-			if (setLists) {
-				setLists((prevList) => [...prevList, data]);
-			}
-			if (setFilteredLists) {
-				setFilteredLists((prev) => [...prev, { list: data, numTasks: 0 }]);
-			}
-			toast("List has been created", {
-				description: `${dayjs(data.createdAt)
-					.format("dddd, MMMM DD, YYYY [at] h:mm A")
-					.toString()}`,
-			});
-			setIsOpen(false);
-		} catch (error) {
-			console.error("List creation error:", error);
-			setErrorMessage("An unexpected error occurred.");
-			setIsLoading(false);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+		},
+		[setIsOpen, setLists, setListWithTaskCounts, user, addList]
+	);
 
 	return (
 		<Form {...form}>
@@ -111,7 +116,7 @@ const AddListForm = ({
 									className="h-12"
 									onChange={(e) => {
 										field.onChange(e);
-										setErrorMessage(""); // Clear error message on typing
+										form.clearErrors("name"); // Clear error message on typing
 									}}
 								/>
 							</FormControl>
@@ -133,7 +138,7 @@ const AddListForm = ({
 									className="h-12"
 									onChange={(e) => {
 										field.onChange(e);
-										setErrorMessage(""); // Clear error message on typing
+										form.clearErrors("description"); // Clear error message on typing
 									}}
 								/>
 							</FormControl>

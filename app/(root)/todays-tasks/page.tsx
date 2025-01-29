@@ -16,6 +16,7 @@ import {
 } from "../lists/[listName]/page";
 import TaskFilters from "@/components/tasks/TaskFilters";
 import { Input } from "@/components/ui/input";
+import dayjs from "dayjs";
 
 const TodaysTasks = () => {
 	const [loadingTasks, setLoadingTasks] = useState(false);
@@ -32,6 +33,8 @@ const TodaysTasks = () => {
 	);
 	const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
 	const [searchText, setSearchText] = useState<string>("");
+
+	const todaysDate = dayjs().format("dddd, MMM D");
 
 	const clearFilters = () => {
 		setSelectedPriority(undefined);
@@ -119,7 +122,8 @@ const TodaysTasks = () => {
 			) : (
 				<>
 					<PageTitle>Today&apos;s Tasks</PageTitle>
-					<div className="w-full text-center mb-5 flex flex-col lg:flex-row items-center gap-3">
+					<span className="text-xl">{todaysDate}</span>
+					<div className="w-full text-center my-5 flex flex-col lg:flex-row items-center gap-3">
 						<TaskFilters
 							selectedPriority={selectedPriority}
 							selectedStatus={selectedStatus}

@@ -26,7 +26,8 @@ const DeleteAccount = ({
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 
-	const deleteUser = async () => {
+	const deleteUser = async (e: React.MouseEvent) => {
+		e.preventDefault();
 		if (user) {
 			setIsLoading(true);
 			try {
@@ -49,11 +50,9 @@ const DeleteAccount = ({
 		}
 	};
 
-	const handleDeleteUser = async (event: React.MouseEvent) => {
+	const handleDeleteUser = async (e: React.MouseEvent) => {
+		const userDeleted = await deleteUser(e);
 		setIsOpen(false); // Close the dialog manually only after operations
-		event.preventDefault();
-		const userDeleted = await deleteUser();
-
 		if (userDeleted) {
 			await new Promise((resolve) => setTimeout(resolve, 1500)); // Optional delay
 			router.push("/login");

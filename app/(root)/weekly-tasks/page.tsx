@@ -15,6 +15,7 @@ import {
 } from "../lists/[listName]/page";
 import TaskFilters from "@/components/tasks/TaskFilters";
 import { Input } from "@/components/ui/input";
+import dayjs from "dayjs";
 
 const UpcomingTasks = () => {
 	const [loadingTasks, setLoadingTasks] = useState(false);
@@ -32,6 +33,13 @@ const UpcomingTasks = () => {
 	const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
 	const [searchText, setSearchText] = useState<string>("");
 
+	const startOfWeek = dayjs().startOf("week"); // Sunday
+	const endOfWeek = dayjs().endOf("week"); // Saturday
+
+	const weekText = `${startOfWeek.format("MMMM D")} - ${endOfWeek.format(
+		"MMMM D"
+	)}`;
+
 	const clearFilters = () => {
 		setSelectedPriority(undefined);
 		setSelectedStatus(undefined);
@@ -41,7 +49,7 @@ const UpcomingTasks = () => {
 	const getUpcomingTasks = async () => {
 		setLoadingTasks(true);
 		try {
-			const res = await fetch(`/api/tasks/user/${user?.id}/upcoming`, {
+			const res = await fetch(`/api/tasks/user/${user?.id}/week`, {
 				method: "GET",
 				headers: { "Content-Type": "application/json" },
 			});
@@ -118,8 +126,9 @@ const UpcomingTasks = () => {
 				</div>
 			) : (
 				<>
-					<PageTitle>Upcoming Tasks</PageTitle>
-					<div className="w-full text-center mb-5 flex flex-col lg:flex-row items-center gap-3">
+					<PageTitle>Weekly Tasks</PageTitle>
+					<span className="text-xl">{weekText}</span>
+					<div className="w-full text-center my-5 flex flex-col lg:flex-row items-center gap-3">
 						<TaskFilters
 							selectedPriority={selectedPriority}
 							selectedStatus={selectedStatus}
