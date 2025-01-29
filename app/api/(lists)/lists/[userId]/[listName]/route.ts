@@ -5,7 +5,7 @@ interface Context {
 	params: { userId: string; listName: string };
 }
 
-export async function GET(context: Context) {
+export async function GET(req: Request, context: Context) {
 	try {
 		const { userId, listName } = context.params;
 
