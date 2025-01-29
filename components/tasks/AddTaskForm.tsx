@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import LoadingSpinner from "../login/LoadingSpinner";
 import { Task } from "@prisma/client";
 import { Priority } from "@prisma/client";
-import { useAuthContext } from "@/app/context/AuthContext";
 import {
 	Select,
 	SelectContent,

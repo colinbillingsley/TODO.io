@@ -14,11 +14,9 @@ import EditTaskForm from "./EditTaskForm";
 
 const EditTask = ({
 	task,
-	listTasks,
 	setListTasks,
 }: {
 	task: Task;
-	listTasks: Task[];
 	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }) => {
 	const [isOpen, setIsOpen] = useState(false);

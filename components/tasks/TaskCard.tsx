@@ -133,11 +133,7 @@ const TaskCard = ({
 						<TooltipProvider>
 							<Tooltip delayDuration={100}>
 								<TooltipTrigger asChild>
-									<EditTask
-										task={task}
-										listTasks={listTasks}
-										setListTasks={setListTasks}
-									/>
+									<EditTask task={task} setListTasks={setListTasks} />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Edit</p>

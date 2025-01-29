@@ -15,7 +15,6 @@ function Home() {
 	const [weekTasks, setWeekTasks] = useState<Task[]>([]);
 	const [numWeekTasks, setNumWeekTasks] = useState(0);
 	const [numCompletedWeekTasks, setNumCompletedWeekTasks] = useState(0);
-	const [tasks, setTasks] = useState<Task[]>([]);
 	const [numTasks, setNumTasks] = useState(0);
 	const [numCompletedTasks, setNumCompletedTasks] = useState(0);
 	const [numTodoTasks, setNumTodoTasks] = useState(0);
@@ -39,7 +38,6 @@ function Home() {
 				setNumTasks(totalTasks);
 				setNumCompletedTasks(numCompleted);
 				setNumTodoTasks(totalTasks - numCompleted);
-				setTasks(allTasks);
 			}
 		} catch (error) {
 			console.error(error);
