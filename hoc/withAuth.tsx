@@ -15,7 +15,6 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 				const storedUser = getUserFromLocalStorage();
 				if (!storedUser) {
 					router.push("/login");
-					logoutUser();
 				} else {
 					setUser(storedUser);
 				}
