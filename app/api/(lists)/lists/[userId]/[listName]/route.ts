@@ -6,7 +6,7 @@ export async function GET(
 	{ params }: { params: { listName: string; userId: string } }
 ) {
 	try {
-		const { userId, listName } = await params;
+		const { listName, userId } = await params;
 
 		if (!userId || !listName) {
 			return NextResponse.json(
