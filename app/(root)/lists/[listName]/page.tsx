@@ -54,6 +54,32 @@ const ListPage = () => {
 		return formattedDate;
 	};
 
+	const sortDatesAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+		);
+	};
+
+	const sortDatesDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+		);
+	};
+
+	const sortDatesCreatedAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		);
+	};
+
+	const sortDatesCreatedDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
+	};
+
 	const fetchListTasks = async (projectId: string | null) => {
 		if (projectId) {
 			try {
@@ -251,27 +277,3 @@ const ListPage = () => {
 };
 
 export default withAuth(ListPage);
-
-export const sortDatesAscending = (tasks: Task[]) => {
-	tasks.sort(
-		(a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-	);
-};
-
-export const sortDatesDescending = (tasks: Task[]) => {
-	tasks.sort(
-		(a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
-	);
-};
-
-export const sortDatesCreatedAscending = (tasks: Task[]) => {
-	tasks.sort(
-		(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-	);
-};
-
-export const sortDatesCreatedDescending = (tasks: Task[]) => {
-	tasks.sort(
-		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-	);
-};

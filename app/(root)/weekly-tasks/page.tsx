@@ -7,12 +7,6 @@ import withAuth from "@/hoc/withAuth";
 import { Priority, Task } from "@prisma/client";
 import { Logs } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-	sortDatesAscending,
-	sortDatesCreatedAscending,
-	sortDatesCreatedDescending,
-	sortDatesDescending,
-} from "../lists/[listName]/page";
 import TaskFilters from "@/components/tasks/TaskFilters";
 import { Input } from "@/components/ui/input";
 import dayjs from "dayjs";
@@ -39,6 +33,32 @@ const UpcomingTasks = () => {
 	const weekText = `${startOfWeek.format("MMMM D")} - ${endOfWeek.format(
 		"MMMM D"
 	)}`;
+
+	const sortDatesAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+		);
+	};
+
+	const sortDatesDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+		);
+	};
+
+	const sortDatesCreatedAscending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+		);
+	};
+
+	const sortDatesCreatedDescending = (tasks: Task[]) => {
+		tasks.sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		);
+	};
 
 	const clearFilters = () => {
 		setSelectedPriority(undefined);
