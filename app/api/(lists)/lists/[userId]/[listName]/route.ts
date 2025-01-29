@@ -1,12 +1,13 @@
 import { getListByName } from "@/db/lists";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-	req: NextRequest,
-	{ params }: { params: { userId: string; listName: string } }
-) {
+interface Context {
+	params: { userId: string; listName: string };
+}
+
+export async function GET(req: NextRequest, context: Context) {
 	try {
-		const { userId, listName } = params;
+		const { userId, listName } = context.params;
 
 		if (!userId || !listName) {
 			return NextResponse.json(
