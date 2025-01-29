@@ -9,8 +9,7 @@ import {
 } from "../ui/card";
 import { Priority, Task } from "@prisma/client";
 import dayjs from "dayjs";
-import { Check, CircleX, Pencil, X } from "lucide-react";
-import { Button } from "../ui/button";
+import { Check, X } from "lucide-react";
 import {
 	Tooltip,
 	TooltipContent,

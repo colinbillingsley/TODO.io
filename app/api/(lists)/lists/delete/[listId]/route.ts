@@ -19,7 +19,10 @@ export async function DELETE(
 		}
 	} catch (error) {
 		return NextResponse.json(
-			{ error: "Unexpected error when deleting list." },
+			{
+				message: "Unknown error occurred when deleting list.",
+				error,
+			},
 			{ status: 500 }
 		);
 	}

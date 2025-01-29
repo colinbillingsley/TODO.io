@@ -17,7 +17,7 @@ export async function GET(
 	} catch (error) {
 		console.error("Error fetching tasks:", error);
 		return NextResponse.json(
-			{ error: "Failed to fetch tasks" },
+			{ message: "Failed to fetch tasks", error },
 			{ status: 500 }
 		);
 	}

@@ -38,7 +38,7 @@ const AddListForm = ({
 	setListWithTaskCounts?: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<String>("");
+	const [errorMessage, setErrorMessage] = useState<string>("");
 	const { user } = useAuthContext();
 	const { addList } = useListContext();
 

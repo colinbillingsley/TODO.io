@@ -7,29 +7,21 @@ import {
 	CardTitle,
 } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { ClipboardList, ListChecks, ListTodo } from "lucide-react";
-import { Task } from "@prisma/client";
 import CircleProgressBar from "./CircleProgressBar";
 
-const CARDICONSIZE = 14;
-
 const TaskOverview = ({
-	tasks,
 	numTasks,
 	numCompletedTasks,
 	numTodoTasks,
 }: {
-	tasks: Task[];
 	numTasks: number;
 	numCompletedTasks: number;
 	numTodoTasks: number;
 }) => {
-	const determineCompletedProgress = () => {
-		return Math.round((numCompletedTasks / numTasks) * 100);
-	};
-
-	const determineNonCompletedProgress = () => {
-		return Math.round((numTodoTasks / numTasks) * 100);
+	const determineCompletedProgress = (total: number, completed: number) => {
+		const num = Math.round((completed / total) * 100);
+		if (num) return num;
+		return 0;
 	};
 
 	return (
@@ -52,12 +44,16 @@ const TaskOverview = ({
 
 				<div className="flex flex-col gap-4 items-center justify-center py-1 px-2 rounded-md">
 					<span className="text-xl font-medium">Tasks Completed</span>
-					<CircleProgressBar progress={determineCompletedProgress()} />
+					<CircleProgressBar
+						progress={determineCompletedProgress(numTasks, numCompletedTasks)}
+					/>
 				</div>
 
 				<div className="flex flex-col gap-4 items-center justify-center py-1 px-2 rounded-md">
 					<span className="text-xl font-medium">Tasks To Complete</span>
-					<CircleProgressBar progress={determineNonCompletedProgress()} />
+					<CircleProgressBar
+						progress={determineCompletedProgress(numTasks, numTodoTasks)}
+					/>
 				</div>
 			</CardContent>
 		</Card>

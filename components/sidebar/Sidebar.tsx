@@ -1,13 +1,11 @@
 "use client";
 import {
-	CalendarDays,
 	CircleCheckBig,
 	CircleUserRound,
 	Clock,
 	FolderKanban,
 	LayoutDashboard,
 	LogOut,
-	Settings,
 } from "lucide-react";
 import { ReactElement } from "react";
 import SidebarLink from "./SideBarLink";
@@ -38,13 +36,6 @@ const sidebarItems: sideBarProps[] = [
 		path: "/weekly-tasks",
 		icon: <Clock size={SIDEBARICONSIZE} />,
 	},
-	// {
-	// 	title: "Calendar",
-	// 	path: "/calendar",
-	// 	icon: <CalendarDays size={SIDEBARICONSIZE} />,
-	// 	hasSubMenu: false,
-	// 	isLink: true,
-	// },
 	{
 		title: "Lists",
 		path: "/lists",

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 	} catch (error) {
 		console.error("Error creating new list:", error);
 		return NextResponse.json(
-			{ message: "An error occurred while creating new list." },
+			{ message: "An error occurred while creating new list.", error },
 			{ status: 500 }
 		);
 	}

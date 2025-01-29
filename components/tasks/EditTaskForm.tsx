@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import dayjs from "dayjs";
@@ -18,12 +18,10 @@ import LoadingSpinner from "../login/LoadingSpinner";
 const EditTaskForm = ({
 	task,
 	setIsOpen,
-	listTasks,
 	setListTasks,
 }: {
 	task: Task;
 	setIsOpen: (param: boolean) => void;
-	listTasks: Task[];
 	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }) => {
 	const [title, setTitle] = useState(task.title);
@@ -34,7 +32,6 @@ const EditTaskForm = ({
 	const [titleError, setTitleError] = useState(false);
 	const [descriptionError, setDescriptionError] = useState(false);
 	const [dateError, setDateError] = useState(false);
-	const [errors, setErrors] = useState(false);
 
 	const [editLoading, setEditLoading] = useState<boolean>(false);
 	const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
@@ -48,7 +45,6 @@ const EditTaskForm = ({
 		setTitleError(false);
 		setDescriptionError(false);
 		setDateError(false);
-		setErrors(false);
 	};
 
 	const determineErrors = async () => {
@@ -151,7 +147,6 @@ const EditTaskForm = ({
 				return;
 			}
 
-			const data = await res.json();
 			editTasks(updatedTask);
 			setIsOpen(false);
 

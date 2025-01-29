@@ -30,7 +30,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const RegisterForm = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<String>("");
+	const [errorMessage, setErrorMessage] = useState<string>("");
 	const { loginUser } = useAuthContext();
 
 	const router = useRouter();

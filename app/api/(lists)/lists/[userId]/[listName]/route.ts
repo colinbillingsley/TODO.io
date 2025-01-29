@@ -31,8 +31,8 @@ export async function GET(
 	} catch (error) {
 		return NextResponse.json(
 			{
-				message: "Internal Server Error",
-				error: "Unknown error occurred when retrieving list by list name.",
+				message: "Unknown error occurred when retrieving list by list name.",
+				error,
 			},
 			{ status: 500 }
 		);

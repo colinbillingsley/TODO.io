@@ -24,14 +24,14 @@ const DeleteList = ({
 	filteredLists,
 	setListWithTaskCounts,
 }: {
-	onClick: (p: any) => void;
+	onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	list: List;
 	setLists: React.Dispatch<React.SetStateAction<List[]>>;
 	filteredLists: ListWithNum[];
 	setListWithTaskCounts: React.Dispatch<React.SetStateAction<ListWithNum[]>>;
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const { lists, removeList } = useListContext();
+	const { removeList } = useListContext();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const updateLists = async (updatedList: List[]) => {

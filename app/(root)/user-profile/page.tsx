@@ -1,12 +1,11 @@
 "use client";
 import { useAuthContext } from "@/app/context/AuthContext";
-import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import DeleteAccount from "@/components/profile/DeleteAccount";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import withAuth from "@/hoc/withAuth";
-import React, { useState } from "react";
+import React from "react";
 
 const UserProfile = () => {
 	const { user, logoutUser } = useAuthContext();

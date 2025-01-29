@@ -111,7 +111,6 @@ function Home() {
 					<PageTitle>Dashboard</PageTitle>
 					<div className="w-full grid grid-cols-1 gap-4">
 						<TaskOverview
-							tasks={tasks}
 							numTasks={numTasks}
 							numCompletedTasks={numCompletedTasks}
 							numTodoTasks={numTodoTasks}

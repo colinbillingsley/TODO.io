@@ -53,7 +53,7 @@ const Lists = () => {
 	};
 
 	const getListTaskAmounts = async (lists: List[]) => {
-		let allListsWithNum: ListWithNum[] = [];
+		const allListsWithNum: ListWithNum[] = [];
 		await Promise.all(
 			lists.map(async (list: List) => {
 				const res = await fetch(`/api/tasks/count/${list.id}`, {

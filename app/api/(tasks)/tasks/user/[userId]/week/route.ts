@@ -13,7 +13,7 @@ export async function GET(
 		return NextResponse.json(weeksTasks, { status: 200 });
 	} catch (error) {
 		return NextResponse.json(
-			{ error: "Failed to fetch this weeks tasks" },
+			{ message: "Failed to fetch this weeks tasks", error },
 			{ status: 500 }
 		);
 	}

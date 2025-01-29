@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import { useAuthContext } from "@/app/context/AuthContext";
 import withAuth from "@/hoc/withAuth";

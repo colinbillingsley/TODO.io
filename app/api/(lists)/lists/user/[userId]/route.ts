@@ -17,7 +17,7 @@ export async function GET(
 	} catch (error) {
 		console.error("Error fetching lists:", error);
 		return NextResponse.json(
-			{ error: "Failed to fetch lists" },
+			{ message: "Failed to fetch lists.", error },
 			{ status: 500 }
 		);
 	}

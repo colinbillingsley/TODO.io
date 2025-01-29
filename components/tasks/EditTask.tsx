@@ -41,7 +41,6 @@ const EditTask = ({
 				<EditTaskForm
 					task={task}
 					setIsOpen={setIsOpen}
-					listTasks={listTasks}
 					setListTasks={setListTasks}
 				/>
 			</DialogContent>

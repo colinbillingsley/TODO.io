@@ -28,7 +28,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<String>("");
+	const [errorMessage, setErrorMessage] = useState<string>("");
 
 	const router = useRouter();
 	const { loginUser } = useAuthContext();

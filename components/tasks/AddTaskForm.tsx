@@ -37,10 +37,8 @@ const AddTaskForm = ({
 	const [titleError, setTitleError] = useState(false);
 	const [descriptionError, setDescriptionError] = useState(false);
 	const [dateError, setDateError] = useState(false);
-	const [errors, setErrors] = useState(false);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { user } = useAuthContext();
 
 	const determineErrors = async () => {
 		// Validate fields

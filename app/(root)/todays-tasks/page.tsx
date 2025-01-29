@@ -1,7 +1,6 @@
 "use client";
 import { useAuthContext } from "@/app/context/AuthContext";
 import LoadingSpinner from "@/components/login/LoadingSpinner";
-import PageContainer from "@/components/PageContainer";
 import PageTitle from "@/components/PageTitle";
 import TaskCard from "@/components/tasks/TaskCard";
 import withAuth from "@/hoc/withAuth";

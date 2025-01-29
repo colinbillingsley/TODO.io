@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
+import React from "react";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { List } from "@/types";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import dayjs from "dayjs";
-import { Button } from "react-day-picker";
-import { Trash2 } from "lucide-react";
 import DeleteList from "./DeleteList";
 import { ListWithNum } from "@/app/(root)/lists/page";
 
