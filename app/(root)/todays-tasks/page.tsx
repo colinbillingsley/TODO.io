@@ -144,12 +144,7 @@ const TodaysTasks = () => {
 					{filteredTasks.length > 0 ? (
 						<div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
 							{filteredTasks.map((task, index) => (
-								<TaskCard
-									task={task}
-									key={index}
-									listTasks={tasks}
-									setListTasks={setTasks}
-								/>
+								<TaskCard task={task} key={index} setListTasks={setTasks} />
 							))}
 						</div>
 					) : (

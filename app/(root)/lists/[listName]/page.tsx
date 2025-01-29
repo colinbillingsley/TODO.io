@@ -107,7 +107,7 @@ const ListPage = () => {
 
 	const fetchData = async () => {
 		await fetchListTasks(projectId);
-		await fetchList(user.id, listName);
+		if (user) await fetchList(user.id, listName);
 	};
 
 	const determineTaskFilters = () => {
@@ -233,7 +233,6 @@ const ListPage = () => {
 									<TaskCard
 										task={task}
 										key={index}
-										listTasks={listTasks}
 										setListTasks={setListTasks}
 									/>
 								))}

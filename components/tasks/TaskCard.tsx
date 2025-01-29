@@ -20,11 +20,9 @@ import EditTask from "./EditTask";
 
 const TaskCard = ({
 	task,
-	listTasks,
 	setListTasks,
 }: {
 	task: Task;
-	listTasks: Task[];
 	setListTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }) => {
 	const [completed, setCompleted] = useState(false);
