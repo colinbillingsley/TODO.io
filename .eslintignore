@@ -1,5 +1,5 @@
 components/ui/
 lib/
-app/api/
+api/
 hoc/
 tailwind.config.ts
