@@ -11,7 +11,6 @@ import { ReactElement } from "react";
 import SidebarLink from "./SideBarLink";
 import { Button } from "../ui/button";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useRouter } from "next/navigation";
 const SIDEBARICONSIZE = 18;
 
 interface sideBarProps {
