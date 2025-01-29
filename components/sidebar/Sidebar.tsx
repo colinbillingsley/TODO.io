@@ -45,7 +45,6 @@ const sidebarItems: sideBarProps[] = [
 
 const Sidebar = () => {
 	const { logoutUser, user } = useAuthContext();
-	const router = useRouter();
 
 	const handleLogout = async () => {
 		logoutUser();
