@@ -1,10 +1,6 @@
 import { getListByName } from "@/db/lists";
 import { NextResponse } from "next/server";
 
-interface Context {
-	params: { userId: string; listName: string };
-}
-
 export async function GET(
 	req: Request,
 	{ params }: { params: { userId: string; listName: string } }
