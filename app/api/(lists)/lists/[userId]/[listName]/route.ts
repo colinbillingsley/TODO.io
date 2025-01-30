@@ -7,7 +7,7 @@ interface Context {
 
 export async function GET(
 	req: Request,
-	{ params }: { params: Record<string, string> }
+	{ params }: { params: { userId: string; listName: string } }
 ) {
 	try {
 		const { userId, listName } = params;

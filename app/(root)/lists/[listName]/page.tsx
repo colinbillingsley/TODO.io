@@ -46,7 +46,8 @@ const ListPage = () => {
 
 	// deconstruct listName param from (xxx-xxx) into (xxx xxx)
 	const deconstructListName = (listTitle: string) => {
-		return listTitle.split("-").join(" ");
+		const listName = listTitle.split("-").join(" ");
+		return listName;
 	};
 
 	const formatDateToString = (date: Date) => {
@@ -133,7 +134,8 @@ const ListPage = () => {
 
 	const fetchData = async () => {
 		await fetchListTasks(projectId);
-		if (user) await fetchList(user.id, listName);
+		if (user && typeof listName === "string")
+			await fetchList(user.id, listName);
 	};
 
 	const determineTaskFilters = () => {
@@ -211,7 +213,9 @@ const ListPage = () => {
 			) : (
 				<>
 					<PageTitle>
-						{listName ? recontructListName(listName) : "List Name Not Found"}
+						{typeof listName === "string"
+							? recontructListName(listName)
+							: "List Name Not Found"}
 					</PageTitle>
 					<div className="flex flex-col gap-2 justify-center mb-4">
 						<span>{listInfo?.description}</span>
