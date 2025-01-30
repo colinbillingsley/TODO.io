@@ -3,7 +3,7 @@ import { getProjectTasks } from "@/db/tasks";
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { projectId: string } }
+	{ params }: { params: Promise<{ projectId: string }> }
 ) {
 	const { projectId } = await params;
 

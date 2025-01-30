@@ -3,7 +3,7 @@ import { getAllUserTasks } from "@/db/tasks";
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { userId: string } }
+	{ params }: { params: Promise<{ userId: string }> }
 ) {
 	const { userId } = await params;
 

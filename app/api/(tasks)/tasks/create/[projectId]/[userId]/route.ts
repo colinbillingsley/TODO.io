@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 
 export async function POST(
 	req: NextRequest,
-	{ params }: { params: { projectId: string; userId: string } }
+	{ params }: { params: Promise<{ projectId: string; userId: string }> }
 ) {
 	try {
 		const { projectId, userId } = await params;
