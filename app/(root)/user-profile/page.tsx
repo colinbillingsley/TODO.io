@@ -32,7 +32,7 @@ const UserProfile = () => {
 			</div>
 
 			<div className="mt-5">
-				<DeleteAccount user={user} logoutUser={logoutUser} />
+				{user ? <DeleteAccount user={user} logoutUser={logoutUser} /> : ""}
 			</div>
 		</>
 	);
