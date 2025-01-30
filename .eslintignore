@@ -3,3 +3,5 @@ lib/
 api/
 hoc/
 tailwind.config.ts
+app/api/
+app/api/(lists)
