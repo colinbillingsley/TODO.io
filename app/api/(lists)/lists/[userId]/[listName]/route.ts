@@ -5,9 +5,12 @@ interface Context {
 	params: { userId: string; listName: string };
 }
 
-export async function GET(req: Request, context: Context) {
+export async function GET(
+	req: Request,
+	{ params }: { params: Record<string, string> }
+) {
 	try {
-		const { userId, listName } = context.params;
+		const { userId, listName } = params;
 
 		if (!userId || !listName) {
 			return NextResponse.json(
