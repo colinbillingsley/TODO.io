@@ -125,36 +125,38 @@ const EditTaskForm = ({
 			const errors = await determineErrors();
 			if (errors) return;
 
-			const updatedTask: Task = {
-				...task,
-				title,
-				description,
-				dueDate,
-				priority,
-			};
+			if (title && description && dueDate && priority) {
+				const updatedTask: Task = {
+					...task,
+					title,
+					description,
+					dueDate,
+					priority,
+				};
 
-			const res = await fetch(`/api/tasks/update/${task.id}`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(updatedTask),
-			});
+				const res = await fetch(`/api/tasks/update/${task.id}`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(updatedTask),
+				});
 
-			if (!res.ok) {
-				const errorData = await res.json();
-				console.log(errorData, "Unexpected error occurred adding task.");
-				return;
+				if (!res.ok) {
+					const errorData = await res.json();
+					console.log(errorData, "Unexpected error occurred adding task.");
+					return;
+				}
+
+				editTasks(updatedTask);
+				setIsOpen(false);
+
+				toast(`${task.title} has been edited`, {
+					description: `${dayjs(new Date())
+						.format("dddd, MMMM DD, YYYY [at] h:mm A")
+						.toString()}`,
+				});
 			}
-
-			editTasks(updatedTask);
-			setIsOpen(false);
-
-			toast(`${task.title} has been edited`, {
-				description: `${dayjs(new Date())
-					.format("dddd, MMMM DD, YYYY [at] h:mm A")
-					.toString()}`,
-			});
 		} catch (error) {
 			console.error(error);
 		} finally {
