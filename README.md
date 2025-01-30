@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# To-Do Application
 
-## Getting Started
+A simple and efficient To-Do application built with Next.js, TypeScript, Supabase, and ShadCN.
+Visit the site at https://todo-io-olive.vercel.app.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- ✅ User Registraion/Login
+- 📝 Complete, create, edit, and delete tasks
+- 📌 Organize tasks with creation of Lists
+- 🔄 Real-time updates
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend:** Next.js, TypeScript, ShadCN, Tailwind CSS
+- **Backend:** Supabase (PostgreSQL) and Prisma
+- **Deployment:** Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Images
+<img width="1680" alt="Screenshot 2025-01-30 at 12 14 14 PM" src="https://github.com/user-attachments/assets/0721ec36-4d47-4ee8-a4f0-ab723c543c91" />
 
-## Learn More
+<img width="1680" alt="Screenshot 2025-01-30 at 12 24 12 PM" src="https://github.com/user-attachments/assets/fc83433e-92db-4665-baa7-f62663c4295c" />
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<img width="1680" alt="Screenshot 2025-01-30 at 12 24 30 PM" src="https://github.com/user-attachments/assets/22c36536-95c6-424b-967b-6a5dbba24ae6" />
