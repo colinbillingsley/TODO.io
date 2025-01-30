@@ -230,11 +230,15 @@ const ListPage = () => {
 
 					{/* Filters */}
 					<div className="w-full text-center mb-5 flex flex-col lg:flex-row items-center gap-3">
-						<AddTask
-							projectId={projectId}
-							userId={user?.id}
-							setListTasks={setListTasks}
-						/>
+						{user && projectId ? (
+							<AddTask
+								projectId={projectId}
+								userId={user.id}
+								setListTasks={setListTasks}
+							/>
+						) : (
+							""
+						)}
 
 						<TaskFilters
 							selectedPriority={selectedPriority}
